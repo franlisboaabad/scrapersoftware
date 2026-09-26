@@ -290,7 +290,7 @@
                 const data = await response.json();
 
                 if (data.success) {
-                    mostrarResultados(data.empresas);
+                    mostrarResultados(data.empresas, data.saved, data.save_error);
                     document.getElementById('extractEmailsBtn').disabled = false;
 
                     // Guardar empresas en localStorage para usar después
@@ -303,7 +303,7 @@
             }
         });
 
-        function mostrarResultados(empresas) {
+        function mostrarResultados(empresas, saved, saveError) {
             const tbody = document.getElementById('resultsBody');
             tbody.innerHTML = '';
 
@@ -336,6 +336,31 @@
                 </div>
             `;
             document.getElementById('stats').innerHTML = stats;
+            mostrarEstadoGuardado(saved, saveError);
+        }
+
+        function mostrarEstadoGuardado(saved, saveError) {
+            let banner = document.getElementById('saveStatus');
+            if (!banner) {
+                banner = document.createElement('div');
+                banner.id = 'saveStatus';
+                document.getElementById('stats').after(banner);
+            }
+
+            if (saved === true) {
+                banner.className = 'alert alert-success';
+                banner.textContent = 'Búsqueda guardada en la base de datos.';
+                return;
+            }
+
+            if (saveError) {
+                banner.className = 'alert alert-error';
+                banner.textContent = 'No se pudo guardar en la base de datos: ' + saveError;
+                return;
+            }
+
+            banner.textContent = '';
+            banner.className = '';
         }
 
         document.getElementById('extractEmailsBtn').addEventListener('click', async () => {
@@ -364,7 +389,8 @@
                             },
                             body: JSON.stringify({
                                 url: empresas[i].website,
-                                empresa: empresas[i].nombre
+                                empresa: empresas[i].nombre,
+                                place_id: empresas[i].place_id
                             })
                         });
 

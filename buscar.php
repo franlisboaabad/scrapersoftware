@@ -1,5 +1,7 @@
 <?php
 // buscar.php - Llamada a Google Places API
+require_once __DIR__ . '/config/persist.php';
+
 header('Content-Type: application/json');
 
 // ============================================
@@ -84,10 +86,22 @@ try {
         $count++;
     }
 
+    $busquedaId = null;
+    $saveError = null;
+
+    try {
+        $busquedaId = guardarResultadosBusqueda($keyword, $location, $limit, $empresas);
+    } catch (Throwable $exception) {
+        $saveError = $exception->getMessage();
+    }
+
     echo json_encode([
         'success' => true,
         'empresas' => $empresas,
-        'total' => count($empresas)
+        'total' => count($empresas),
+        'busqueda_id' => $busquedaId,
+        'saved' => $busquedaId !== null,
+        'save_error' => $saveError,
     ]);
 } catch (Exception $e) {
     echo json_encode([
