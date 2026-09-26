@@ -20,7 +20,7 @@
         resultsBody.innerHTML = '<tr><td colspan="7">Buscando empresas…</td></tr>';
 
         try {
-            const response = await fetch(`${base}/buscar.php`, {
+            const response = await fetch(`${base}/Controller/buscar.php`, {
                 method: 'POST',
                 headers: { 'Content-Type': 'application/json' },
                 body: JSON.stringify({
@@ -119,7 +119,7 @@
             progressBar.textContent = `${percent}% · ${empresas[i].nombre}`;
 
             try {
-                const response = await fetch(`${base}/extraer_emails.php`, {
+                const response = await fetch(`${base}/Controller/extraer_emails.php`, {
                     method: 'POST',
                     headers: { 'Content-Type': 'application/json' },
                     body: JSON.stringify({

@@ -1,28 +1,27 @@
 <?php
-// buscar.php - Llamada a Google Places API
-require_once __DIR__ . '/config/persist.php';
+
+require_once dirname(__DIR__) . '/config/persist.php';
 
 header('Content-Type: application/json');
 
-// ============================================
-// CONFIGURACIÓN - ¡PON AQUÍ TU API KEY!
-// ============================================
-$API_KEY = 'AIzaSyBRgLt2e4V8kOvfMIzC_7QlwVosEqOTxQ0'; // <-- REEMPLAZA ESTO
+$API_KEY = env('GOOGLE_PLACES_API_KEY');
 
-// Recibir datos del frontend
 $data = json_decode(file_get_contents('php://input'), true);
 $keyword = trim($data['keyword'] ?? '');
 $location = $data['location'] ?? 'Piura, Perú';
-$limit = min(intval($data['limit'] ?? 20), 60); // Máximo 60 por API
+$limit = min(intval($data['limit'] ?? 20), 60);
 
 try {
+    if (!$API_KEY) {
+        throw new Exception('Falta GOOGLE_PLACES_API_KEY en el archivo .env');
+    }
+
     if ($keyword === '') {
         throw new Exception('Indica el rubro a buscar.');
     }
 
     $query = $keyword . ' en ' . $location;
 
-    // Llamar a Google Places API (Text Search)
     $url = "https://maps.googleapis.com/maps/api/place/textsearch/json";
     $params = [
         'query' => $query,
@@ -53,9 +52,10 @@ try {
     $count = 0;
 
     foreach ($result['results'] as $place) {
-        if ($count >= $limit) break;
+        if ($count >= $limit) {
+            break;
+        }
 
-        // Obtener detalles adicionales del lugar (website, teléfono)
         $placeId = $place['place_id'];
         $detailsUrl = "https://maps.googleapis.com/maps/api/place/details/json";
         $detailsParams = [

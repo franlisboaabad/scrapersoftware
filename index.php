@@ -30,6 +30,13 @@ $page = $_GET['page'] ?? 'dashboard';
 $pages = [
     'dashboard' => __DIR__ . '/View/dashboard.php',
     'buscar' => __DIR__ . '/View/buscar.php',
+    'informacion' => __DIR__ . '/View/informacion.php',
+];
+
+$titles = [
+    'dashboard' => 'Panel',
+    'buscar' => 'Nueva búsqueda',
+    'informacion' => 'Información',
 ];
 
 if (!isset($pages[$page])) {
@@ -37,6 +44,6 @@ if (!isset($pages[$page])) {
 }
 
 $viewFile = $pages[$page];
-$pageTitle = $page === 'buscar' ? 'Nueva búsqueda' : 'Panel';
+$pageTitle = $titles[$page];
 
 require __DIR__ . '/View/layout.php';

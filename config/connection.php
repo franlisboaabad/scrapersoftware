@@ -1,5 +1,7 @@
 <?php
 
+require_once __DIR__ . '/env.php';
+
 function db(): PDO
 {
     static $pdo = null;

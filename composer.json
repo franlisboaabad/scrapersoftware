@@ -1,6 +1,7 @@
 {
     "require": {
         "peterujah/email-crawl": "^1.0",
-        "guzzlehttp/guzzle": "^7.10"
+        "guzzlehttp/guzzle": "^7.10",
+        "vlucas/phpdotenv": "^5.7"
     }
 }

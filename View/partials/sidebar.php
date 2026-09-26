@@ -19,4 +19,11 @@
             Buscar
         </a>
     </nav>
+
+    <nav class="nav nav-foot" aria-label="Acerca del proyecto">
+        <a class="nav-link<?= $page === 'informacion' ? ' is-active' : '' ?>" href="<?= e(app_url('informacion')) ?>">
+            <i class="fa-solid fa-circle-info" aria-hidden="true"></i>
+            Información
+        </a>
+    </nav>
 </aside>

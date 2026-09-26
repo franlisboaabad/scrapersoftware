@@ -1,7 +1,6 @@
 <?php
-// extraer_emails.php - Extrae emails de un sitio web usando EmailCrawl
-require_once 'vendor/autoload.php';
-require_once __DIR__ . '/config/persist.php';
+
+require_once dirname(__DIR__) . '/config/persist.php';
 
 use Peterujah\NanoBlock\EmailCrawl;
 
@@ -18,17 +17,14 @@ if (!$url) {
 }
 
 try {
-    // Validar URL
     if (!filter_var($url, FILTER_VALIDATE_URL)) {
         throw new Exception('URL inválida');
     }
 
-    // Extraer emails con EmailCrawl
-    $craw = new EmailCrawl($url, 20); // Profundidad 20 páginas
+    $craw = new EmailCrawl($url, 20);
     $response = $craw->craw()->getResponse();
     $todosEmails = $response->asArray();
 
-    // Filtrar emails (excluir correos genéricos si deseas)
     $excludedPatterns = [
         '/^info@/i',
         '/^ventas@/i',
