@@ -11,12 +11,15 @@ $API_KEY = 'AIzaSyBRgLt2e4V8kOvfMIzC_7QlwVosEqOTxQ0'; // <-- REEMPLAZA ESTO
 
 // Recibir datos del frontend
 $data = json_decode(file_get_contents('php://input'), true);
-$keyword = $data['keyword'] ?? 'agencias de viajes';
+$keyword = trim($data['keyword'] ?? '');
 $location = $data['location'] ?? 'Piura, Perú';
 $limit = min(intval($data['limit'] ?? 20), 60); // Máximo 60 por API
 
 try {
-    // Construir la consulta
+    if ($keyword === '') {
+        throw new Exception('Indica el rubro a buscar.');
+    }
+
     $query = $keyword . ' en ' . $location;
 
     // Llamar a Google Places API (Text Search)
